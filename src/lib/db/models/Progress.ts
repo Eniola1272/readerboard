@@ -10,10 +10,16 @@ export interface IProgress extends Document {
   bookId: mongoose.Types.ObjectId;
   // The last page the user visited
   currentPage: number;
-  // Array of all pages the user has visited (optional for advanced features)
+  // Total unique pages the user has read in this book
+  pagesRead: number;
+  // Array of all unique pages the user has visited
   visitedPages: number[];
-  
-  // Added standard Mongoose timestamp fields for better tracking
+  // The last time the user read this book
+  lastReadDate: Date;
+  // Whether the user has finished the book
+  completed: boolean;
+
+  // Mongoose timestamp fields
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,14 +39,28 @@ const ProgressSchema = new mongoose.Schema<IProgress>({
     type: Number, 
     default: 1 
   },
+  pagesRead: {
+    type: Number,
+    default: 0,
+  },
   visitedPages: { 
     type: [Number], 
     default: [] 
   },
+  lastReadDate: {
+    type: Date,
+    default: Date.now,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
 }, {
-    // Enable Mongoose timestamps (createdAt and updatedAt)
     timestamps: true 
 });
+
+// Compound index for the most common query pattern (one progress per user per book)
+ProgressSchema.index({ userId: 1, bookId: 1 }, { unique: true });
 
 // --- 2. Export the Typed Mongoose Model ---
 

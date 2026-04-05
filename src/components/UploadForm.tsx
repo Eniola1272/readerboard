@@ -105,7 +105,7 @@ export default function UploadForm() {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Upload File (PDF or EPUB) *
+          Upload File (PDF) *
         </label>
         <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors">
           <div className="space-y-1 text-center">
@@ -127,7 +127,7 @@ export default function UploadForm() {
                 <span>Upload a file</span>
                 <input
                   type="file"
-                  accept=".pdf,.epub"
+                  accept=".pdf"
                   onChange={(e) => setFile(e.target.files?.[0] || null)}
                   className="sr-only"
                   required
@@ -135,7 +135,7 @@ export default function UploadForm() {
               </label>
               <p className="pl-1">or drag and drop</p>
             </div>
-            <p className="text-xs text-gray-500">PDF or EPUB up to 50MB</p>
+            <p className="text-xs text-gray-500">PDF up to 50MB</p>
             {file && (
               <p className="text-sm text-blue-600 font-medium mt-2">
                 Selected: {file.name}

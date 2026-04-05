@@ -50,8 +50,9 @@ export default function EditProfileForm({ user }: EditProfileFormProps) {
 
       router.push('/profile');
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

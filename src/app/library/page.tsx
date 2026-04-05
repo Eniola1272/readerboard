@@ -20,7 +20,7 @@ interface BookItem {
 async function getUserBooks(userId: string): Promise<BookItem[]> {
   await connectDB();
   // Filter books by the logged-in user's ID
-  const books = await Book.find({ userId: userId })
+  const books = await Book.find({ uploadedBy: userId })
     .sort({ createdAt: -1 })
     .lean();
 
