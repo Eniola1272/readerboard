@@ -2,18 +2,14 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/authOptions';
 import { redirect } from 'next/navigation';
 import connectDB from '@/lib/db/mongodb';
-import User, { IUser } from '@/lib/db/models/User'; // Assuming IUser is exported from your User model
+import User, { IUser } from '@/lib/db/models/User';
 import { Book } from '@/lib/db/models/Book';
-import { Progress } from '@/lib/db/models/Progress'; // Assuming IProgress is exported
+import { Progress } from '@/lib/db/models/Progress';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// --- Interface Definitions ---
-
-// Define the shape of the user object retrieved from the database (excluding password)
-// Note: Assuming 'User' model returns a plain object after .lean() and JSON.parse
 interface UserProfile extends Omit<IUser, 'password'> {
-  _id: string; // Add required fields not explicitly defined in IUser
+  _id: string;
   name: string;
   username: string;
   email: string;
@@ -22,7 +18,6 @@ interface UserProfile extends Omit<IUser, 'password'> {
   booksCompleted: number;
 }
 
-// Define the shape of the data returned by the main fetch function
 interface UserProfileData {
   user: UserProfile;
   stats: {
@@ -34,42 +29,31 @@ interface UserProfileData {
   recentActivity: Activity[];
 }
 
-// Define the shape for Recent Activity items (based on IProgress/Progress model)
 interface Activity {
   _id: string;
   pagesRead: number;
   lastReadDate: string | number | Date;
   completed: boolean;
-  // You might need to add bookId, title, etc., if Progress has those fields
 }
-
 
 async function getUserProfile(userId: string): Promise<UserProfileData> {
   await connectDB();
-  
-  // NOTE: Use .select() to potentially improve performance/security by limiting fields.
-  const userDoc = await User.findById(userId).select('-password').lean(); 
-  
+
+  const userDoc = await User.findById(userId).select('-password').lean();
+
   if (!userDoc) {
-      // Throw an error or return a specific structure if the user is not found
-      // This helps guarantee 'user' is present if the function succeeds.
-      throw new Error("User not found in DB");
+    throw new Error("User not found in DB");
   }
 
-  // Find books uploaded by user (count)
   const booksUploadedCount = await Book.find({ uploadedBy: userId }).countDocuments();
-  
-  // Find all progress documents for the user
-    const progressDocs = await Progress.find({ userId }).lean();
-    
-    // Calculate reading stats
-    const totalPagesRead = userDoc.pagesRead || 0;
-    const booksCompleted = userDoc.booksCompleted || 0;
-    const currentlyReading = progressDocs.filter((p) => !p.completed).length; 
-    
-    // Mongoose documents need to be converted to plain objects for Next.js serialization
-    const serializedUser = JSON.parse(JSON.stringify(userDoc));
-    const serializedProgress = JSON.parse(JSON.stringify(progressDocs.slice(0, 5)));
+  const progressDocs = await Progress.find({ userId }).lean();
+
+  const totalPagesRead = userDoc.pagesRead || 0;
+  const booksCompleted = userDoc.booksCompleted || 0;
+  const currentlyReading = progressDocs.filter((p) => !p.completed).length;
+
+  const serializedUser = JSON.parse(JSON.stringify(userDoc));
+  const serializedProgress = JSON.parse(JSON.stringify(progressDocs.slice(0, 5)));
 
   return {
     user: serializedUser as UserProfile,
@@ -92,27 +76,23 @@ export default async function ProfilePage() {
 
   let profileData: UserProfileData;
   try {
-    // 1. FIX: The return value is correctly typed as UserProfileData
     profileData = await getUserProfile(session.user.id);
   } catch (e) {
     console.error(e);
-    return <div>Failed to load profile data.</div>;
+    return <div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-gray-500">Failed to load profile data.</p></div>;
   }
-  
-  // Destructure from the typed object
+
   const { user, stats, recentActivity } = profileData;
 
-  // Since getUserProfile throws if no user is found, this is a safety net
-  // but if the function works, 'user' will be defined.
   if (!user) {
-    return <div>User not found</div>;
+    return <div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-gray-500">User not found</p></div>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-surface py-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
-        <div className="bg-white rounded-lg shadow-sm p-8 mb-6">
+        <div className="bg-white rounded-card shadow-soft p-8 mb-6">
           <div className="flex items-start gap-6">
             {/* Avatar */}
             <div className="flex-shrink-0">
@@ -120,12 +100,12 @@ export default async function ProfilePage() {
                 <Image
                   src={user.avatar}
                   alt={user.name}
-                  className="w-24 h-24 rounded-full ring-4 ring-blue-100"
+                  className="w-24 h-24 rounded-full ring-4 ring-brand-200"
                   width={96}
                   height={96}
                 />
               ) : (
-                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center ring-4 ring-blue-100">
+                <div className="w-24 h-24 bg-gradient-to-br from-brand-400 to-brand-600 rounded-full flex items-center justify-center ring-4 ring-brand-200 shadow-glow">
                   <span className="text-white text-3xl font-bold">
                     {user.name.charAt(0).toUpperCase()}
                   </span>
@@ -137,44 +117,45 @@ export default async function ProfilePage() {
             <div className="flex-1">
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
-                  {/* Safely display username if it exists */}
-                  {user.username && <p className="text-gray-600 mt-1">@{user.username}</p>}
-                  <p className="text-sm text-gray-500 mt-1">{user.email}</p>
+                  <h1 className="text-3xl font-extrabold text-brand-950">{user.name}</h1>
+                  {user.username && (
+                    <p className="text-brand-400 mt-1 font-medium">@{user.username}</p>
+                  )}
+                  <p className="text-sm text-gray-400 mt-0.5">{user.email}</p>
                 </div>
                 <Link
                   href="/profile/edit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium"
+                  className="px-4 py-2 bg-brand-100 text-brand-700 rounded-pill hover:bg-brand-200 text-sm font-medium transition-colors"
                 >
                   Edit Profile
                 </Link>
               </div>
 
               {/* Quick Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
-                <div className="text-center p-3 bg-blue-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+                <div className="text-center p-3 bg-brand-50 rounded-card">
+                  <div className="text-2xl font-bold text-brand-600">
                     {stats.totalPagesRead.toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">Pages Read</div>
+                  <div className="text-xs text-gray-500 mt-1">Pages Read</div>
                 </div>
-                <div className="text-center p-3 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                <div className="text-center p-3 bg-emerald-50 rounded-card">
+                  <div className="text-2xl font-bold text-emerald-600">
                     {stats.booksCompleted}
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">Books Done</div>
+                  <div className="text-xs text-gray-500 mt-1">Books Done</div>
                 </div>
-                <div className="text-center p-3 bg-purple-50 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
+                <div className="text-center p-3 bg-brand-100 rounded-card">
+                  <div className="text-2xl font-bold text-brand-500">
                     {stats.currentlyReading}
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">Reading Now</div>
+                  <div className="text-xs text-gray-500 mt-1">Reading Now</div>
                 </div>
-                <div className="text-center p-3 bg-orange-50 rounded-lg">
-                  <div className="text-2xl font-bold text-orange-600">
+                <div className="text-center p-3 bg-amber-50 rounded-card">
+                  <div className="text-2xl font-bold text-amber-500">
                     {stats.booksUploaded}
                   </div>
-                  <div className="text-xs text-gray-600 mt-1">Uploaded</div>
+                  <div className="text-xs text-gray-500 mt-1">Uploaded</div>
                 </div>
               </div>
             </div>
@@ -184,45 +165,35 @@ export default async function ProfilePage() {
         {/* Reading Stats */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           {/* Progress Overview */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Reading Progress</h2>
-            
+          <div className="bg-white rounded-card shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-brand-950 mb-4">Reading Progress</h2>
+
             {stats.totalPagesRead === 0 ? (
               <div className="text-center py-8">
-                <svg
-                  className="mx-auto h-12 w-12 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                  />
-                </svg>
-                <p className="text-gray-600 mt-2">Start reading to see your progress!</p>
+                <div className="w-12 h-12 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <svg className="w-6 h-6 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <p className="text-gray-500 text-sm">Start reading to see your progress!</p>
                 <Link
                   href="/library"
-                  className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                  className="inline-block mt-4 px-4 py-2 bg-brand-600 text-white rounded-pill hover:bg-brand-700 text-sm font-medium"
                 >
                   Go to Library
                 </Link>
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Average pages/day (estimate)</span>
-                  <span className="text-lg font-semibold text-gray-900">
-                    {/* NOTE: Calculating average pages/day over a fixed 30 days might be misleading. 
-                       It's better to calculate based on the user's join date or use a more accurate metric. */}
+                <div className="flex justify-between items-center py-3 border-b border-brand-50">
+                  <span className="text-sm text-gray-500">Avg. pages/day (30d)</span>
+                  <span className="text-lg font-semibold text-brand-950">
                     {Math.round(stats.totalPagesRead / 30)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Completion rate</span>
-                  <span className="text-lg font-semibold text-gray-900">
+                <div className="flex justify-between items-center py-3">
+                  <span className="text-sm text-gray-500">Completion rate</span>
+                  <span className="text-lg font-semibold text-brand-950">
                     {stats.booksUploaded > 0
                       ? `${Math.round((stats.booksCompleted / stats.booksUploaded) * 100)}%`
                       : '0%'}
@@ -233,77 +204,61 @@ export default async function ProfilePage() {
           </div>
 
           {/* Leaderboard Position */}
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Leaderboard Rank</h2>
+          <div className="bg-white rounded-card shadow-soft p-6">
+            <h2 className="text-lg font-semibold text-brand-950 mb-4">Leaderboard Rank</h2>
             <div className="text-center py-4">
-              <div className="text-4xl font-bold text-blue-600 mb-2">
-                #—
-              </div>
-              <p className="text-sm text-gray-600">
-                Read more to climb the ranks!
-              </p>
+              <div className="text-4xl font-extrabold gradient-text mb-2">#—</div>
+              <p className="text-sm text-gray-500">Read more to climb the ranks!</p>
               <Link
                 href="/leaderboard"
-                className="inline-block mt-4 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm"
+                className="inline-block mt-4 px-5 py-2 bg-brand-100 text-brand-700 rounded-pill hover:bg-brand-200 text-sm font-medium transition-colors"
               >
-                View Leaderboard
+                View Leaderboard →
               </Link>
             </div>
           </div>
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
-            <Link href="/library" className="text-sm text-blue-600 hover:text-blue-700">
+        <div className="bg-white rounded-card shadow-soft p-6">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-semibold text-brand-950">Recent Activity</h2>
+            <Link href="/library" className="text-sm text-brand-600 hover:text-brand-700 font-medium">
               View All →
             </Link>
           </div>
 
           {recentActivity.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-600">No reading activity yet</p>
+              <p className="text-gray-500 text-sm">No reading activity yet</p>
             </div>
           ) : (
-            // 3. FIX: Removed inline interface declaration and constant assignment from JSX return
             <div className="space-y-3">
-              {/* recentActivity is already typed as Activity[], so no further casting needed */}
               {recentActivity.map((activity) => (
                 <div
                   key={activity._id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                  className="flex items-center justify-between p-3 bg-brand-50 rounded-lg hover:bg-brand-100 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <svg
-                        className="w-5 h-5 text-blue-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                        />
+                    <div className="w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                       </svg>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-brand-950">
                         {activity.pagesRead} pages read
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-400">
                         {new Date(activity.lastReadDate).toLocaleDateString()}
                       </p>
                     </div>
                   </div>
                   <span
-                    className={`text-xs px-2 py-1 rounded-full ${
+                    className={`text-xs px-2.5 py-1 rounded-full font-medium ${
                       activity.completed
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-blue-100 text-blue-700'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-brand-100 text-brand-700'
                     }`}
                   >
                     {activity.completed ? 'Completed' : 'In Progress'}

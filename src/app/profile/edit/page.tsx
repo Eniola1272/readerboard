@@ -21,11 +21,11 @@ export default async function EditProfilePage() {
   const user = await getUser(session.user.id);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-surface py-10">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Edit Profile</h1>
-          <p className="text-gray-600 mt-2">Update your personal information</p>
+        <div className="mb-8">
+          <h1 className="text-3xl font-extrabold text-brand-950">Edit Profile</h1>
+          <p className="text-gray-500 mt-2">Update your personal information</p>
         </div>
 
         <EditProfileForm user={user} />

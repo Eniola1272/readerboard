@@ -42,11 +42,10 @@ export default function UploadForm() {
         throw new Error(result.error || 'Upload failed');
       }
 
-      // Redirect to library
       router.push('/library');
       router.refresh();
     } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       setError(errorMessage);
     } finally {
       setUploading(false);
@@ -54,15 +53,15 @@ export default function UploadForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm p-8 space-y-6">
+    <form onSubmit={handleSubmit} className="bg-white rounded-card shadow-soft p-8 space-y-6">
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm">
           {error}
         </div>
       )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-brand-950 mb-2">
           Book Title *
         </label>
         <input
@@ -70,26 +69,26 @@ export default function UploadForm() {
           required
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-gray-400 outline-none transition-colors"
           placeholder="Enter book title"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-brand-950 mb-2">
           Author
         </label>
         <input
           type="text"
           value={formData.author}
           onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-gray-400 outline-none transition-colors"
           placeholder="Enter author name"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-brand-950 mb-2">
           Total Pages *
         </label>
         <input
@@ -98,19 +97,19 @@ export default function UploadForm() {
           min="1"
           value={formData.totalPages}
           onChange={(e) => setFormData({ ...formData, totalPages: e.target.value })}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-gray-400 outline-none transition-colors"
           placeholder="Enter total number of pages"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-medium text-brand-950 mb-2">
           Upload File (PDF) *
         </label>
-        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-400 transition-colors">
-          <div className="space-y-1 text-center">
+        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-brand-200 border-dashed rounded-card hover:border-brand-400 transition-colors bg-brand-50/20">
+          <div className="space-y-2 text-center">
             <svg
-              className="mx-auto h-12 w-12 text-gray-400"
+              className="mx-auto h-12 w-12 text-brand-300"
               stroke="currentColor"
               fill="none"
               viewBox="0 0 48 48"
@@ -122,8 +121,8 @@ export default function UploadForm() {
                 strokeLinejoin="round"
               />
             </svg>
-            <div className="flex text-sm text-gray-600">
-              <label className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
+            <div className="flex text-sm text-gray-500 justify-center">
+              <label className="relative cursor-pointer font-medium text-brand-600 hover:text-brand-700">
                 <span>Upload a file</span>
                 <input
                   type="file"
@@ -135,9 +134,9 @@ export default function UploadForm() {
               </label>
               <p className="pl-1">or drag and drop</p>
             </div>
-            <p className="text-xs text-gray-500">PDF up to 50MB</p>
+            <p className="text-xs text-gray-400">PDF up to 50MB</p>
             {file && (
-              <p className="text-sm text-blue-600 font-medium mt-2">
+              <p className="text-sm text-brand-600 font-medium mt-2">
                 Selected: {file.name}
               </p>
             )}
@@ -148,7 +147,7 @@ export default function UploadForm() {
       <button
         type="submit"
         disabled={uploading}
-        className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+        className="w-full bg-brand-600 text-white py-3 rounded-pill font-semibold hover:bg-brand-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors shadow-glow"
       >
         {uploading ? 'Uploading...' : 'Upload Book'}
       </button>
