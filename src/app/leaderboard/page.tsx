@@ -2,6 +2,15 @@ import connectDB from "@/lib/db/mongodb";
 import User from "@/lib/db/models/User";
 import Image from "next/image";
 
+interface LeaderboardUser {
+  _id: string;
+  name: string;
+  username: string;
+  avatar?: string;
+  pagesRead: number;
+  booksCompleted: number;
+}
+
 async function getLeaderboard() {
   try {
     await connectDB();
@@ -10,7 +19,7 @@ async function getLeaderboard() {
       .limit(100)
       .select("name username avatar pagesRead booksCompleted")
       .lean();
-    return JSON.parse(JSON.stringify(users));
+    return JSON.parse(JSON.stringify(users)) as LeaderboardUser[];
   } catch (error) {
     console.error("Leaderboard error:", error);
     return [];
@@ -36,7 +45,7 @@ export default async function LeaderboardPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {leaderboard.map((user: any, index: number) => (
+            {leaderboard.map((user: LeaderboardUser, index: number) => (
               <div
                 key={user._id}
                 className={`flex items-center gap-4 p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow ${

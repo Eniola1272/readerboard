@@ -65,7 +65,7 @@ async function getUserProfile(userId: string): Promise<UserProfileData> {
     // Calculate reading stats
     const totalPagesRead = userDoc.pagesRead || 0;
     const booksCompleted = userDoc.booksCompleted || 0;
-    const currentlyReading = progressDocs.filter((p) => !(p as any).completed).length; 
+    const currentlyReading = progressDocs.filter((p) => !p.completed).length; 
     
     // Mongoose documents need to be converted to plain objects for Next.js serialization
     const serializedUser = JSON.parse(JSON.stringify(userDoc));

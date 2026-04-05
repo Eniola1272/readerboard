@@ -14,12 +14,15 @@ interface MongooseCache {
 }
 
 // 2. Safely Access and Initialize Global Cache
-let cached = (global as any).mongoose as MongooseCache;
+const globalWithMongoose = global as typeof globalThis & {
+  mongoose?: MongooseCache;
+};
 
-if (!cached) {
-  cached = { conn: null, promise: null };
-  (global as any).mongoose = cached;
+if (!globalWithMongoose.mongoose) {
+  globalWithMongoose.mongoose = { conn: null, promise: null };
 }
+
+const cached: MongooseCache = globalWithMongoose.mongoose;
 
 // 3. Connection Function
 async function connectDB() {
