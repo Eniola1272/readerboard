@@ -1,9 +1,9 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth/authOptions';
 import { redirect } from 'next/navigation';
-import connectDB from '@/lib/mongodb';
-import { Book } from '@/lib/models/Book';
-import { Progress } from '@/lib/models/Progress';
+import connectDB from '@/lib/db/mongodb';
+import { Book } from '@/lib/db/models/Book';
+import { Progress } from '@/lib/db/models/Progress';
 import PDFReaderClient from '@/components/PDFReaderClient';
 
 async function getBookAndProgress(bookId: string, userId: string) {

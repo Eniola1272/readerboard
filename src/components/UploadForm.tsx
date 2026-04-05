@@ -45,8 +45,9 @@ export default function UploadForm() {
       // Redirect to library
       router.push('/library');
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      setError(errorMessage);
     } finally {
       setUploading(false);
     }

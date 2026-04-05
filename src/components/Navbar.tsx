@@ -5,6 +5,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 export default function Navbar() {
   const { data: session, status } = useSession();
@@ -80,7 +81,9 @@ export default function Navbar() {
                   className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   {session.user?.image ? (
-                    <img
+                    <Image
+                    width={32}
+                    height={32}
                       src={session.user.image}
                       alt={session.user.name || 'User'}
                       className="w-8 h-8 rounded-full"

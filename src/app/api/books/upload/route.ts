@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import connectDB from '@/lib/mongodb';
-import { Book } from '@/lib/models/Book';
+import { authOptions } from '@/lib/auth/authOptions';
+import connectDB from '@/lib/db/mongodb';
+import { Book } from '@/lib/db/models/Book';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
