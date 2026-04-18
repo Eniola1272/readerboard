@@ -2,35 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ========= Google Font ========= */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* ========= Google Fonts ========= */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
 
 /* ========= CSS Variables ========= */
 :root {
-  --bg-primary: #F5F3FF;
-  --bg-card: #FFFFFF;
-  --bg-elevated: #EDE9FE;
-  --text-primary: #1E1B4B;
-  --text-secondary: #4C1D95;
-  --text-body: #6B7280;
-  --brand-primary: #7C3AED;
-  --brand-hover: #6D28D9;
-  --brand-light: #A78BFA;
-  --brand-subtle: #C4B5FD;
-  --gold: #F59E0B;
-  --silver: #9CA3AF;
-  --bronze: #D97706;
-  --trend-up: #10B981;
-  --trend-down: #EF4444;
+  --bg-primary:    #FAF7F2;
+  --bg-card:       #FFFFFF;
+  --bg-elevated:   #F5F0E8;
+  --text-primary:  #1a1a1a;
+  --text-secondary:#6b6560;
+  --text-body:     #6b6560;
+  --brand-primary: #B45309;
+  --brand-hover:   #92400E;
+  --brand-light:   #C4A97A;
+  --brand-subtle:  #DCC9A8;
+  --gold:          #F59E0B;
+  --silver:        #9CA3AF;
+  --bronze:        #D97706;
+  --trend-up:      #10B981;
+  --trend-down:    #EF4444;
 }
 
 /* ========= Base Styles ========= */
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   color: var(--text-primary);
   background: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  h1, h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.3px;
+  }
 }
 
 /* ========= Utility Classes ========= */
@@ -39,20 +47,20 @@ body {
     text-wrap: balance;
   }
 
-  /* Gradient text */
+  /* Gradient text — warm amber */
   .gradient-text {
-    background: linear-gradient(135deg, #7C3AED, #A78BFA, #F59E0B);
+    background: linear-gradient(135deg, #B45309, #D97706, #F59E0B);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* Glass card */
+  /* Glass card — warm */
   .glass-card {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(232, 226, 218, 0.6);
   }
 
   /* Pill row for leaderboard */
@@ -79,7 +87,7 @@ body {
     box-shadow: 0 0 0 3px #FBBF24;
   }
 
-  /* Rank badge (numbered circle on avatar) */
+  /* Rank badge */
   .rank-badge {
     position: absolute;
     top: -4px;
@@ -96,7 +104,7 @@ body {
     border: 2px solid white;
   }
 
-  /* Smooth page transitions */
+  /* Page transitions */
   .page-enter {
     animation: fadeIn 0.5s ease-out, slideUp 0.5s ease-out;
   }

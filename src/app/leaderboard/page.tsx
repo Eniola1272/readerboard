@@ -78,13 +78,13 @@ export default async function LeaderboardPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-4xl font-extrabold text-brand-950 mb-2">Leaderboard</h1>
-          <p className="text-gray-500">Top readers ranked by pages read</p>
+          <h1 className="text-4xl text-brand-950 mb-2">Leaderboard</h1>
+          <p className="text-brand-500">Top readers ranked by pages read</p>
         </div>
 
         {leaderboard.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-card shadow-soft">
-            <p className="text-gray-500 text-lg">No readers yet. Be the first!</p>
+          <div className="text-center py-16 bg-white rounded-card shadow-soft border border-brand-200">
+            <p className="text-brand-500 text-lg">No readers yet. Be the first!</p>
           </div>
         ) : (
           <>
@@ -114,15 +114,12 @@ export default async function LeaderboardPage() {
                             </span>
                           </div>
                         )}
-                        {/* Rank badge */}
-                        <div
-                          className={`rank-badge ${rankBadgeColors[rank] ?? "bg-brand-500"}`}
-                        >
+                        <div className={`rank-badge ${rankBadgeColors[rank] ?? "bg-brand-500"}`}>
                           {rank}
                         </div>
                       </div>
 
-                      <p className="font-semibold text-brand-950 text-sm text-center w-full truncate">
+                      <p className="font-medium text-brand-950 text-sm text-center w-full truncate">
                         {user.name}
                       </p>
                       <p className="text-xs text-brand-500 font-medium">
@@ -154,18 +151,16 @@ export default async function LeaderboardPage() {
                       key={user._id}
                       className={`pill-row flex items-center gap-4 ${
                         isYou
-                          ? "bg-brand-300/40 border border-brand-300"
+                          ? "bg-brand-200/60 border border-brand-300"
                           : i % 2 === 0
                           ? "bg-brand-100"
                           : "bg-brand-50"
                       }`}
                     >
-                      {/* Rank */}
                       <div className="w-8 flex-shrink-0 text-center">
-                        <span className="text-sm font-bold text-gray-400">#{rank}</span>
+                        <span className="text-sm font-bold text-brand-400">#{rank}</span>
                       </div>
 
-                      {/* Avatar */}
                       <div className="flex-shrink-0">
                         {user.avatar ? (
                           <Image
@@ -184,40 +179,31 @@ export default async function LeaderboardPage() {
                         )}
                       </div>
 
-                      {/* Name */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="font-semibold text-brand-950 truncate text-sm">
+                          <p className="font-medium text-brand-950 truncate text-sm">
                             {user.name}
                           </p>
                           {isYou && (
-                            <span className="text-xs bg-brand-500 text-white px-2 py-0.5 rounded-full font-medium flex-shrink-0">
+                            <span className="text-xs bg-brand-600 text-white px-2 py-0.5 rounded-full font-medium flex-shrink-0">
                               You
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-gray-400">@{user.username}</p>
+                        <p className="text-xs text-brand-400">@{user.username}</p>
                       </div>
 
-                      {/* Trend */}
                       <div className="flex-shrink-0 w-5 text-center">
-                        {trend === "up" && (
-                          <span className="text-emerald-500 font-bold text-sm">↑</span>
-                        )}
-                        {trend === "down" && (
-                          <span className="text-red-400 font-bold text-sm">↓</span>
-                        )}
-                        {trend === "neutral" && (
-                          <span className="text-gray-300 text-sm">—</span>
-                        )}
+                        {trend === "up" && <span className="text-emerald-500 font-bold text-sm">↑</span>}
+                        {trend === "down" && <span className="text-red-400 font-bold text-sm">↓</span>}
+                        {trend === "neutral" && <span className="text-brand-300 text-sm">—</span>}
                       </div>
 
-                      {/* Points */}
                       <div className="text-right flex-shrink-0">
-                        <p className="font-bold text-brand-700 text-sm">
+                        <p className="font-bold text-brand-600 text-sm">
                           {user.pagesRead?.toLocaleString() || 0}pts
                         </p>
-                        <p className="text-xs text-gray-400">{user.booksCompleted || 0} books</p>
+                        <p className="text-xs text-brand-400">{user.booksCompleted || 0} books</p>
                       </div>
                     </div>
                   );

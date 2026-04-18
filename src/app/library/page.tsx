@@ -35,8 +35,8 @@ export default async function LibraryPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center mb-10">
           <div>
-            <h1 className="text-3xl font-extrabold text-brand-950">My Library</h1>
-            <p className="text-gray-500 mt-1">
+            <h1 className="text-3xl text-brand-950">My Library</h1>
+            <p className="text-brand-500 mt-1">
               {books.length} {books.length === 1 ? "book" : "books"} in your collection
             </p>
           </div>
@@ -49,7 +49,7 @@ export default async function LibraryPage() {
         </div>
 
         {books.length === 0 ? (
-          <div className="text-center py-24 bg-white rounded-card shadow-soft">
+          <div className="text-center py-24 bg-white rounded-card shadow-soft border border-brand-200">
             <div className="w-20 h-20 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-5">
               <svg
                 className="w-10 h-10 text-brand-400"
@@ -65,8 +65,8 @@ export default async function LibraryPage() {
                 />
               </svg>
             </div>
-            <h3 className="text-xl font-semibold text-brand-950 mb-2">No books yet</h3>
-            <p className="text-gray-500 mb-6">Upload your first book to get started!</p>
+            <h3 className="text-xl text-brand-950 mb-2">No books yet</h3>
+            <p className="text-brand-500 mb-6">Upload your first book to get started!</p>
             <Link
               href="/upload"
               className="inline-block px-6 py-3 bg-brand-600 text-white rounded-pill hover:bg-brand-700 font-medium shadow-glow transition-all"
@@ -80,12 +80,12 @@ export default async function LibraryPage() {
               <Link
                 key={book._id}
                 href={`/read/${book._id}`}
-                className="bg-white rounded-card shadow-soft hover:shadow-glow transition-all duration-300 overflow-hidden group hover:-translate-y-1"
+                className="bg-white rounded-card shadow-soft hover:shadow-glow transition-all duration-300 overflow-hidden group hover:-translate-y-1 border border-brand-200"
               >
                 <div className="aspect-[3/4] bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-brand-300/20 to-brand-500/30 opacity-0 group-hover:opacity-100 transition-opacity" />
                   <svg
-                    className="w-16 h-16 text-brand-500 group-hover:scale-110 transition-transform duration-300"
+                    className="w-16 h-16 text-brand-400 group-hover:scale-110 transition-transform duration-300"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -99,11 +99,11 @@ export default async function LibraryPage() {
                   </svg>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-semibold text-brand-950 group-hover:text-brand-600 transition-colors line-clamp-2 text-sm leading-snug">
+                  <h3 className="font-serif font-normal text-brand-950 group-hover:text-brand-600 transition-colors line-clamp-2 text-base leading-snug">
                     {book.title}
                   </h3>
                   {book.author && (
-                    <p className="text-xs text-gray-500 mt-1 truncate">{book.author}</p>
+                    <p className="text-xs text-brand-500 mt-1 truncate">{book.author}</p>
                   )}
                   {book.totalPages && (
                     <p className="text-xs text-brand-400 mt-1.5 font-medium">

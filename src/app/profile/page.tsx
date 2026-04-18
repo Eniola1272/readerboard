@@ -79,20 +79,28 @@ export default async function ProfilePage() {
     profileData = await getUserProfile(session.user.id);
   } catch (e) {
     console.error(e);
-    return <div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-gray-500">Failed to load profile data.</p></div>;
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <p className="text-brand-500">Failed to load profile data.</p>
+      </div>
+    );
   }
 
   const { user, stats, recentActivity } = profileData;
 
   if (!user) {
-    return <div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-gray-500">User not found</p></div>;
+    return (
+      <div className="min-h-screen bg-surface flex items-center justify-center">
+        <p className="text-brand-500">User not found</p>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-surface py-10">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Profile Header */}
-        <div className="bg-white rounded-card shadow-soft p-8 mb-6">
+        <div className="bg-white rounded-card shadow-soft border border-brand-200 p-8 mb-6">
           <div className="flex items-start gap-6">
             {/* Avatar */}
             <div className="flex-shrink-0">
@@ -117,11 +125,11 @@ export default async function ProfilePage() {
             <div className="flex-1">
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-3xl font-extrabold text-brand-950">{user.name}</h1>
+                  <h1 className="text-3xl text-brand-950">{user.name}</h1>
                   {user.username && (
-                    <p className="text-brand-400 mt-1 font-medium">@{user.username}</p>
+                    <p className="text-brand-500 mt-1 font-medium">@{user.username}</p>
                   )}
-                  <p className="text-sm text-gray-400 mt-0.5">{user.email}</p>
+                  <p className="text-sm text-brand-400 mt-0.5">{user.email}</p>
                 </div>
                 <Link
                   href="/profile/edit"
@@ -133,29 +141,29 @@ export default async function ProfilePage() {
 
               {/* Quick Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
-                <div className="text-center p-3 bg-brand-50 rounded-card">
-                  <div className="text-2xl font-bold text-brand-600">
+                <div className="text-center p-3 bg-brand-50 rounded-card border border-brand-200">
+                  <div className="text-2xl font-bold text-brand-600" style={{ fontFamily: 'Instrument Serif, serif' }}>
                     {stats.totalPagesRead.toLocaleString()}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">Pages Read</div>
+                  <div className="text-xs text-brand-500 mt-1">Pages Read</div>
                 </div>
-                <div className="text-center p-3 bg-emerald-50 rounded-card">
-                  <div className="text-2xl font-bold text-emerald-600">
+                <div className="text-center p-3 bg-emerald-50 rounded-card border border-emerald-100">
+                  <div className="text-2xl font-bold text-emerald-600" style={{ fontFamily: 'Instrument Serif, serif' }}>
                     {stats.booksCompleted}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">Books Done</div>
+                  <div className="text-xs text-brand-500 mt-1">Books Done</div>
                 </div>
-                <div className="text-center p-3 bg-brand-100 rounded-card">
-                  <div className="text-2xl font-bold text-brand-500">
+                <div className="text-center p-3 bg-brand-100 rounded-card border border-brand-200">
+                  <div className="text-2xl font-bold text-brand-500" style={{ fontFamily: 'Instrument Serif, serif' }}>
                     {stats.currentlyReading}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">Reading Now</div>
+                  <div className="text-xs text-brand-500 mt-1">Reading Now</div>
                 </div>
-                <div className="text-center p-3 bg-amber-50 rounded-card">
-                  <div className="text-2xl font-bold text-amber-500">
+                <div className="text-center p-3 bg-amber-50 rounded-card border border-amber-100">
+                  <div className="text-2xl font-bold text-amber-600" style={{ fontFamily: 'Instrument Serif, serif' }}>
                     {stats.booksUploaded}
                   </div>
-                  <div className="text-xs text-gray-500 mt-1">Uploaded</div>
+                  <div className="text-xs text-brand-500 mt-1">Uploaded</div>
                 </div>
               </div>
             </div>
@@ -165,8 +173,8 @@ export default async function ProfilePage() {
         {/* Reading Stats */}
         <div className="grid md:grid-cols-2 gap-6 mb-6">
           {/* Progress Overview */}
-          <div className="bg-white rounded-card shadow-soft p-6">
-            <h2 className="text-lg font-semibold text-brand-950 mb-4">Reading Progress</h2>
+          <div className="bg-white rounded-card shadow-soft border border-brand-200 p-6">
+            <h2 className="text-lg text-brand-950 mb-4">Reading Progress</h2>
 
             {stats.totalPagesRead === 0 ? (
               <div className="text-center py-8">
@@ -175,7 +183,7 @@ export default async function ProfilePage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                   </svg>
                 </div>
-                <p className="text-gray-500 text-sm">Start reading to see your progress!</p>
+                <p className="text-brand-500 text-sm">Start reading to see your progress!</p>
                 <Link
                   href="/library"
                   className="inline-block mt-4 px-4 py-2 bg-brand-600 text-white rounded-pill hover:bg-brand-700 text-sm font-medium"
@@ -185,14 +193,14 @@ export default async function ProfilePage() {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="flex justify-between items-center py-3 border-b border-brand-50">
-                  <span className="text-sm text-gray-500">Avg. pages/day (30d)</span>
+                <div className="flex justify-between items-center py-3 border-b border-brand-100">
+                  <span className="text-sm text-brand-500">Avg. pages/day (30d)</span>
                   <span className="text-lg font-semibold text-brand-950">
                     {Math.round(stats.totalPagesRead / 30)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-sm text-gray-500">Completion rate</span>
+                  <span className="text-sm text-brand-500">Completion rate</span>
                   <span className="text-lg font-semibold text-brand-950">
                     {stats.booksUploaded > 0
                       ? `${Math.round((stats.booksCompleted / stats.booksUploaded) * 100)}%`
@@ -204,11 +212,11 @@ export default async function ProfilePage() {
           </div>
 
           {/* Leaderboard Position */}
-          <div className="bg-white rounded-card shadow-soft p-6">
-            <h2 className="text-lg font-semibold text-brand-950 mb-4">Leaderboard Rank</h2>
+          <div className="bg-white rounded-card shadow-soft border border-brand-200 p-6">
+            <h2 className="text-lg text-brand-950 mb-4">Leaderboard Rank</h2>
             <div className="text-center py-4">
-              <div className="text-4xl font-extrabold gradient-text mb-2">#—</div>
-              <p className="text-sm text-gray-500">Read more to climb the ranks!</p>
+              <div className="text-4xl gradient-text mb-2" style={{ fontFamily: 'Instrument Serif, serif' }}>#—</div>
+              <p className="text-sm text-brand-500">Read more to climb the ranks!</p>
               <Link
                 href="/leaderboard"
                 className="inline-block mt-4 px-5 py-2 bg-brand-100 text-brand-700 rounded-pill hover:bg-brand-200 text-sm font-medium transition-colors"
@@ -220,9 +228,9 @@ export default async function ProfilePage() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-card shadow-soft p-6">
+        <div className="bg-white rounded-card shadow-soft border border-brand-200 p-6">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold text-brand-950">Recent Activity</h2>
+            <h2 className="text-lg text-brand-950">Recent Activity</h2>
             <Link href="/library" className="text-sm text-brand-600 hover:text-brand-700 font-medium">
               View All →
             </Link>
@@ -230,7 +238,7 @@ export default async function ProfilePage() {
 
           {recentActivity.length === 0 ? (
             <div className="text-center py-8">
-              <p className="text-gray-500 text-sm">No reading activity yet</p>
+              <p className="text-brand-500 text-sm">No reading activity yet</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -249,7 +257,7 @@ export default async function ProfilePage() {
                       <p className="text-sm font-medium text-brand-950">
                         {activity.pagesRead} pages read
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-brand-400">
                         {new Date(activity.lastReadDate).toLocaleDateString()}
                       </p>
                     </div>

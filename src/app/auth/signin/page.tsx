@@ -19,22 +19,22 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface py-12 px-4">
-      <div className="max-w-md w-full space-y-6 bg-white rounded-card shadow-soft p-8">
+      <div className="max-w-md w-full space-y-6 bg-white rounded-card shadow-soft border border-brand-200 p-8">
         {/* Logo */}
         <div className="text-center">
           <div className="flex justify-center mb-4">
             <div className="w-12 h-12 bg-gradient-to-br from-brand-600 to-brand-400 rounded-xl flex items-center justify-center shadow-glow">
-              <span className="text-white font-bold text-2xl">R</span>
+              <span className="text-white font-bold text-2xl" style={{ fontFamily: 'DM Sans, sans-serif' }}>R</span>
             </div>
           </div>
-          <h2 className="text-3xl font-extrabold text-brand-950">Welcome back</h2>
-          <p className="mt-2 text-gray-500 text-sm">Sign in to your Readerboard account</p>
+          <h2 className="text-3xl text-brand-950">Welcome back</h2>
+          <p className="mt-2 text-brand-500 text-sm">Sign in to your Readerboard account</p>
         </div>
 
         {/* Google */}
         <button
           onClick={() => signIn('google', { callbackUrl: '/' })}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-brand-200 rounded-pill hover:bg-brand-50 transition-colors text-sm font-medium text-brand-950"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 border border-brand-200 rounded-pill hover:bg-surface-elevated transition-colors text-sm font-medium text-brand-950"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -47,10 +47,10 @@ export default function SignInPage() {
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-brand-100" />
+            <div className="w-full border-t border-brand-200" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="px-3 bg-white text-gray-400">Or continue with email</span>
+            <span className="px-3 bg-white text-brand-400">Or continue with email</span>
           </div>
         </div>
 
@@ -60,7 +60,7 @@ export default function SignInPage() {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-gray-400 outline-none transition-colors text-sm"
+            className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-brand-400 outline-none transition-colors text-sm"
             required
           />
           <input
@@ -68,18 +68,18 @@ export default function SignInPage() {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-gray-400 outline-none transition-colors text-sm"
+            className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:ring-2 focus:ring-brand-400 focus:border-brand-400 bg-brand-50/30 text-brand-950 placeholder-brand-400 outline-none transition-colors text-sm"
             required
           />
           <button
             type="submit"
-            className="w-full bg-brand-600 text-white py-3 rounded-pill hover:bg-brand-700 font-semibold shadow-glow transition-all text-sm"
+            className="w-full bg-brand-600 text-white py-3 rounded-pill hover:bg-brand-700 font-medium shadow-glow transition-all text-sm"
           >
             Sign In
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500">
+        <p className="text-center text-sm text-brand-500">
           Don&apos;t have an account?{' '}
           <Link href="/auth/register" className="text-brand-600 hover:text-brand-700 font-medium">
             Sign up free
