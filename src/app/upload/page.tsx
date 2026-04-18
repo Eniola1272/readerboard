@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth/authOptions';
 import { redirect } from 'next/navigation';
 import UploadForm from '@/components/UploadForm';
 
@@ -11,9 +11,12 @@ export default async function UploadPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <div className="max-w-3xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Upload a Book</h1>
+    <div className="min-h-screen bg-surface py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="mb-8">
+          <h1 className="text-3xl text-brand-950">Upload a Book</h1>
+          <p className="text-brand-500 mt-2">Add a new book to your reading library</p>
+        </div>
         <UploadForm />
       </div>
     </div>

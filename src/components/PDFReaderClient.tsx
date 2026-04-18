@@ -19,7 +19,6 @@ interface PDFReaderProps {
 export default function PDFReaderClient({
   fileUrl,
   bookId,
-  userId,
   initialPage,
   totalPages,
   bookTitle,

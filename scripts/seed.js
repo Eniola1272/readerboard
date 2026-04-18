@@ -1,24 +1,37 @@
+require('dotenv').config({ path: '.env.local' });
 const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb+srv://date1272:battleaxe12@cluster0.ygykld3.mongodb.net/readerboard?retryWrites=true&w=majority&appName=Cluster0';
+const uri = process.env.MONGODB_URI;
 
-// Add TLS options
+if (!uri) {
+  console.error('❌ MONGODB_URI not found in .env.local');
+  process.exit(1);
+}
+
 const options = {
   tls: true,
-  tlsAllowInvalidCertificates: true, // For development only
 };
 
 const sampleUsers = [
-  // ... your sample users
+  // Add sample users here
 ];
 
 async function seed() {
-  const client = new MongoClient(uri, options); // Add options here
-  
+  const client = new MongoClient(uri, options);
+
   try {
     console.log('🔌 Connecting to MongoDB...');
     await client.connect();
-    // ... rest of your code
+    console.log('✅ Connected');
+
+    const db = client.db('readerboard');
+
+    if (sampleUsers.length > 0) {
+      const result = await db.collection('users').insertMany(sampleUsers);
+      console.log(`✅ Inserted ${result.insertedCount} users`);
+    } else {
+      console.log('⚠️  No sample users defined. Add data to the sampleUsers array.');
+    }
   } catch (error) {
     console.error('❌ Error:', error);
   } finally {

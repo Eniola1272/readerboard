@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import connectDB from '@/lib/mongodb';
-import { Book } from '@/lib/models/Book';
+import { authOptions } from '@/lib/auth/authOptions';
+import connectDB from '@/lib/db/mongodb';
+import { Book } from '@/lib/db/models/Book';
 import { writeFile, mkdir } from 'fs/promises';
 import { join } from 'path';
 import { existsSync } from 'fs';
 
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    
-    console.log('Session:', session); // DEBUG
-    console.log('User ID:', session?.user?.id); // DEBUG
-    
+
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -33,9 +32,17 @@ export async function POST(req: NextRequest) {
 
     // Validate file type
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    if (fileExtension !== 'pdf' && fileExtension !== 'epub') {
+    if (fileExtension !== 'pdf') {
       return NextResponse.json(
-        { error: 'Only PDF and EPUB files are allowed' },
+        { error: 'Only PDF files are allowed' },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: 'File size must be under 50MB' },
         { status: 400 }
       );
     }
@@ -61,10 +68,8 @@ export async function POST(req: NextRequest) {
       totalPages,
       fileUrl: `/uploads/${filename}`,
       fileType: fileExtension,
-      uploadedBy: session.user.id, // Make sure this has a value!
+      uploadedBy: session.user.id,
     });
-
-    console.log('Book created with uploadedBy:', book.uploadedBy); // DEBUG
 
     return NextResponse.json({ book }, { status: 201 });
   } catch (error) {

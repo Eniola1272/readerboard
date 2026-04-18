@@ -1,18 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-import connectDB from '@/lib/mongodb';
-import { Book } from '@/lib/models/Book';
+
+export const dynamic = 'force-dynamic';
+// import { getServerSession } from 'next-auth';
+// import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import connectDB from '@/lib/db/mongodb';
+import { Book } from '@/lib/db/models/Book';
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    // const _session = await getServerSession(authOptions);
     const { searchParams } = new URL(req.url);
     const userId = searchParams.get('userId');
 
     await connectDB();
 
-    const filter: any = {};
+    const filter: { uploadedBy?: string } = {};
     if (userId) {
       filter.uploadedBy = userId;
     }

@@ -2,26 +2,128 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ========= Google Fonts ========= */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap');
+
+/* ========= CSS Variables ========= */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary:    #FAF7F2;
+  --bg-card:       #FFFFFF;
+  --bg-elevated:   #F5F0E8;
+  --text-primary:  #1a1a1a;
+  --text-secondary:#6b6560;
+  --text-body:     #6b6560;
+  --brand-primary: #B45309;
+  --brand-hover:   #92400E;
+  --brand-light:   #C4A97A;
+  --brand-subtle:  #DCC9A8;
+  --gold:          #F59E0B;
+  --silver:        #9CA3AF;
+  --bronze:        #D97706;
+  --trend-up:      #10B981;
+  --trend-down:    #EF4444;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ========= Base Styles ========= */
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  h1, h2 {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    letter-spacing: -0.3px;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
+/* ========= Utility Classes ========= */
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Gradient text — warm amber */
+  .gradient-text {
+    background: linear-gradient(135deg, #B45309, #D97706, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass card — warm */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(232, 226, 218, 0.6);
+  }
+
+  /* Pill row for leaderboard */
+  .pill-row {
+    border-radius: 9999px;
+    padding: 12px 20px;
+    transition: all 0.2s ease;
+  }
+
+  .pill-row:hover {
+    transform: translateX(4px);
+  }
+
+  /* Podium avatar rings */
+  .avatar-ring-gold {
+    box-shadow: 0 0 0 4px #FCD34D, 0 0 20px rgba(245, 158, 11, 0.25);
+  }
+
+  .avatar-ring-silver {
+    box-shadow: 0 0 0 3px #D1D5DB;
+  }
+
+  .avatar-ring-bronze {
+    box-shadow: 0 0 0 3px #FBBF24;
+  }
+
+  /* Rank badge */
+  .rank-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: white;
+    border: 2px solid white;
+  }
+
+  /* Page transitions */
+  .page-enter {
+    animation: fadeIn 0.5s ease-out, slideUp 0.5s ease-out;
+  }
+}
+
+/* ========= Scrollbar ========= */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-subtle);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-primary);
 }
