@@ -18,12 +18,13 @@ export async function POST(req: NextRequest) {
     }
 
     const formData = await req.formData();
-    const file = formData.get('file') as File;
-    const title = formData.get('title') as string;
-    const author = formData.get('author') as string || 'Unknown';
+    const file       = formData.get('file')       as File;
+    const title      = formData.get('title')      as string;
+    const author     = formData.get('author')     as string || 'Unknown';
     const totalPages = parseInt(formData.get('totalPages') as string);
+    const thumbFile  = formData.get('thumbnail')  as File | null;
 
-    if (!file || !title || !totalPages) {
+    if (!file || !title) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
@@ -53,12 +54,23 @@ export async function POST(req: NextRequest) {
       await mkdir(uploadsDir, { recursive: true });
     }
 
-    // Save file
+    // Save PDF
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     const filename = `${Date.now()}-${file.name.replace(/\s+/g, '-')}`;
     const filepath = join(uploadsDir, filename);
     await writeFile(filepath, buffer);
+
+    // Save thumbnail if provided
+    let thumbnailUrl = '/book-placeholder.png';
+    if (thumbFile && thumbFile.size > 0) {
+      const thumbDir = join(uploadsDir, 'thumbnails');
+      if (!existsSync(thumbDir)) await mkdir(thumbDir, { recursive: true });
+      const thumbBytes = await thumbFile.arrayBuffer();
+      const thumbName  = `cover-${Date.now()}.jpg`;
+      await writeFile(join(thumbDir, thumbName), Buffer.from(thumbBytes));
+      thumbnailUrl = `/uploads/thumbnails/${thumbName}`;
+    }
 
     // Save to database
     await connectDB();
@@ -66,8 +78,9 @@ export async function POST(req: NextRequest) {
       title,
       author,
       totalPages,
-      fileUrl: `/uploads/${filename}`,
-      fileType: fileExtension,
+      fileUrl:   `/uploads/${filename}`,
+      fileType:  fileExtension,
+      thumbnail: thumbnailUrl,
       uploadedBy: session.user.id,
     });
 
