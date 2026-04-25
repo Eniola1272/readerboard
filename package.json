@@ -20,7 +20,6 @@
     "pdfjs-dist": "^4.10.38",
     "react": "^18",
     "react-dom": "^18",
-    "react-pdf": "^10.4.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-react": "^5.29.1"
   },

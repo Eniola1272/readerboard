@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import connectDB from '@/lib/db/mongodb';
 import { Book } from '@/lib/db/models/Book';
 import { Progress } from '@/lib/db/models/Progress';
-import PDFReaderClient from '@/components/PDFReaderClient';
+import PDFReaderWrapper from '@/components/PDFReaderWrapper';
 
 async function getBookAndProgress(bookId: string, userId: string) {
   try {
@@ -39,7 +39,7 @@ export default async function ReadPage({ params }: { params: { bookId: string } 
   }
 
   return (
-    <PDFReaderClient
+    <PDFReaderWrapper
       fileUrl={data.book.fileUrl}
       bookId={params.bookId}
       userId={session.user.id}
