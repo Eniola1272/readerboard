@@ -3,14 +3,10 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/authOptions';
 import connectDB from '@/lib/db/mongodb';
 import { Book } from '@/lib/db/models/Book';
-import { unlink } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { del } from '@vercel/blob';
 
-async function deleteFile(publicPath: string) {
-  if (!publicPath || publicPath === '/book-placeholder.png') return;
-  const abs = join(process.cwd(), 'public', publicPath);
-  if (existsSync(abs)) await unlink(abs).catch(() => {});
+function isBlobUrl(url: string) {
+  return url?.startsWith('https://') && url.includes('blob.vercel-storage.com');
 }
 
 export async function DELETE(
@@ -33,9 +29,9 @@ export async function DELETE(
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
-  // Delete files from disk
-  await deleteFile(book.fileUrl);
-  await deleteFile(book.thumbnail);
+  // Delete blobs (only URLs stored in Vercel Blob — skip local/placeholder paths)
+  const toDelete = [book.fileUrl, book.thumbnail].filter(isBlobUrl);
+  if (toDelete.length) await del(toDelete);
 
   await book.deleteOne();
   return NextResponse.json({ success: true });
