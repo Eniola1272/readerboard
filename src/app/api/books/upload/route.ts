@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
     const author = formData.get('author') as string || 'Unknown';
     const totalPages = parseInt(formData.get('totalPages') as string);
 
-    if (!file || !title || !totalPages) {
+    if (!file || !title) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
