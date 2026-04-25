@@ -5,6 +5,7 @@ import connectDB from "@/lib/db/mongodb";
 import { Book } from "@/lib/db/models/Book";
 import Link from "next/link";
 import Image from "next/image";
+import DeleteBookButton from "@/components/DeleteBookButton";
 
 interface BookItem {
   _id: string;
@@ -102,6 +103,7 @@ export default async function LibraryPage() {
                       </div>
                     </>
                   )}
+                  <DeleteBookButton bookId={book._id} />
                 </div>
                 <div className="p-4">
                   <h3 className="font-serif font-normal text-brand-950 group-hover:text-brand-600 transition-colors line-clamp-2 text-base leading-snug">
